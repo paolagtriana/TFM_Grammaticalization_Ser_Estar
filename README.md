@@ -1,5 +1,5 @@
 # Studying the diachrony of *ser* and *estar*
-This code has been created for the Master's thesis *Grammaticalization Of Ser and Estar: A Corpus-based Study*, by Paola González Triana.
+This code has been created for the Master's thesis "Grammaticalization Of Ser and Estar: A Corpus-based Study" by Paola González Triana.
 
 The project aimed to analyze the changes in the frequency of the lemmas 'ser' and 'estar' and their combinations with other grammatical categories in R1 position during the early stages of Modern Spanish, that is, between the 12th and the 16th century. The code was used to retrieve the frequencies in CSV files and plot them through Matplotlib, and it is adapted to search for any word or label in the context, for any temporal bin and different plotting formats.
 
