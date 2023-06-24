@@ -4,9 +4,7 @@ import os
 from bs4 import BeautifulSoup as BS
 
 ''' The files that will be split need to be the same folder (in this case, a subfolder called 'corpus')
-    Then, this script gives 2 options:
-        1. Save files in separate subfolders
-        2. Save all files in just one folder (in this case, the 'corpus' folder)'''
+    Then, this script will save the product in separate subfolders of a folder called 'corpus' '''
 
 #Creation of a list of objects with the keys 'id' (the first letter of each file to split) and 'filename' (its path)
 corpuslist = [{'id': 'A',
@@ -34,7 +32,6 @@ for i in corpuslist: #A loop that iterates through every item of 'corpuslist'
     
     index = 1 #We create an index in order to name new files by the structure LETTER + NUMBER
     for j in elem: #We create a loop that iterates through every text in 'elem'
-        #OPTION 1 - Save files in separate subfolders
         try:
             os.makedirs("./corpus/" + letter)
         except FileExistsError: # directory already exists
@@ -44,9 +41,3 @@ for i in corpuslist: #A loop that iterates through every item of 'corpuslist'
         newFile.write(str(j))
         newFile.close()
         index += 1
-            
-        #OPTION 2 - Save all files in just one folder
-        #newFile = open('./corpus/' + letter + str(index) + '.txt', 'w')
-        #newFile.write(str(j))
-        #newFile.close()
-        #index += 1
