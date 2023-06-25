@@ -7,18 +7,18 @@ The project aimed to analyze the changes in the frequency of the lemmas 'ser' an
 
 The project was carried out by executing the files in the following order:
 
-__1. *separator.py*__
+__1. separator.py__
 
 This script separates the texts contained in the five SRC files of the corpus and saves each one into a different TXT file.
 
-__2. *metadata.py*__
+__2. metadata.py__
 
 This script identifies the metadata of all files using BeautifulSoup. An option for filtering by metadata is available, and examples of this filtering option are commented.
 
-__3. *csv.py*__
+__3. csv.py__
 
 This script converts the texts separated by 'separator.py' into CSV files. They are saved into different subfolders depending on the bin they belong to. Bin size can be changed.
 
-__5. *analyzer.py*__
+__5. analyzer.py__
 
 This script can be used for either retrieving the contexts of a word or plotting the frequency (general, by genre, and by doc). If plotting frequencies, these can be absolute, relative, or per million tokens, and either the full corpus or a sample of 1M of a given seed can be used as the data for the analysis, Results are saved in a CSV file and a line or scatter plot, and it is also possible to make a bar plot of the token size of the corpus (either sampled or not), and also divide the results by genre (only without sampling) and by doc (only without sampling). If retrieving the context of the occurrences of a given word, the window size of the context is specified as an input variable, and results are saved in several CSV files, one for each period.
