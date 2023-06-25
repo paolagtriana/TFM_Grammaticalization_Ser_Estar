@@ -17,8 +17,8 @@ This script identifies the metadata of all files using BeautifulSoup. An option 
 
 __3. csv.py__
 
-This script converts the texts separated by 'separator.py' into CSV files. They are saved into different subfolders depending on the bin they belong to. Bin size can be changed.
+This script converts the texts separated by 'separator.py' into CSV files. They are saved into different subfolders depending on the bin they belong to. The bin size can be changed as desired.
 
-__5. analyzer.py__
+__4. analyzer.py__
 
 This script can be used for either retrieving the contexts of a word or plotting the frequency (general, by genre, and by doc). If plotting frequencies, these can be absolute, relative, or per million tokens, and either the full corpus or a sample of 1M of a given seed can be used as the data for the analysis, Results are saved in a CSV file and a line or scatter plot, and it is also possible to make a bar plot of the token size of the corpus (either sampled or not), and also divide the results by genre (only without sampling) and by doc (only without sampling). If retrieving the context of the occurrences of a given word, the window size of the context is specified as an input variable, and results are saved in several CSV files, one for each period.
