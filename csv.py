@@ -17,8 +17,9 @@ from bs4 import BeautifulSoup as BS
 corpuspaths = ['./corpus/A/', './corpus/B/', './corpus/C/', './corpus/D/', './corpus/E/']
 
 ''' PROCESSING THE DATA '''
+print("\n")
 #We set the interval that we want for our bins
-bin_size = 25
+bin_size = int(input('Which size do you want the bins to be?: '))
 #We create a list of periods using our bin size adding it to the ending point,
 #To make sure that the last element is included even if the last period is not a divisor of our bin size
 bins = np.arange(1100, 1599 + bin_size, bin_size).tolist()
@@ -63,9 +64,9 @@ for path in corpuspaths:
         
         #We create a dataframe with the dictionary created above
         df = pd.DataFrame({'Token': [x['Token'] for x in tokens_lemmas_labels],
-                           'Lemma': [x['Lemma'] for x in tokens_lemmas_labels],
-                           'Label': [x['Label'] for x in tokens_lemmas_labels]})
-        
+                            'Lemma': [x['Lemma'] for x in tokens_lemmas_labels],
+                            'Label': [x['Label'] for x in tokens_lemmas_labels]})
+            
         #We search for the attribute of the label <text> called 'date' and assign it to a variable
         date = int(elem[0]['date'])
         
@@ -78,23 +79,16 @@ for path in corpuspaths:
         temp = math.floor(temp)
         #We use the number we have obtained to indicate the index of th date in the list of bins
         mybin = bins[temp]
-        #We make the interval explicit
-        period = str(mybin) + "-" + str(mybin + bin_size - 1)
         
-        #We create a new folder called 'csv_25_years' in case it does not exist already
+        #We create a new folder called 'csv_{bin_size}_years' and a subfolder for the current bin in case it does not exist already
+        path_folder = "./corpus/csv_" + str(bin_size) + "_years/"
+        
         try:
-            os.makedirs("./corpus/csv_25_years/")
+            os.makedirs(path_folder + str(mybin) + "/")
         except FileExistsError: # directory already exists
             pass
         
-        #We create a new folder with the current period being analyzed in case it does not exist already
-        try:
-            os.makedirs("./corpus/csv_25_years/" + period + "/")
-        except FileExistsError: # directory already exists
-            pass
-        
-        #We save our dataframe into a new CSV file
-        df.to_csv('./corpus/csv_25_years/' + period + "/" + file.replace('.txt', '.csv'), index=False)
+        df.to_csv(path_folder + str(mybin) + "/" + file.replace('.txt', '.csv'), index=False)
 
         #OPTIONAL: The script prints the file that has just been analized as a control measure
         print(f'File {file} done')
