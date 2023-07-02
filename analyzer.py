@@ -690,10 +690,6 @@ def return_contexts(word, df, all_tokens, window_size):
         all_contexts_period = []
         all_printable_contexts = []
         
-        files_gerunds = []
-        gerunds = []
-        printable_gerunds = []
-        
         #We save the name of files of the current period and set another counter for the file
         files_period = files[index_period]
         index_file = 0
@@ -739,18 +735,6 @@ def return_contexts(word, df, all_tokens, window_size):
                         else:
                             context.append(['null', 'null', 'AQ0CS0'])
                             print(text[number])
-                            
-                    # for word_context in context:
-                    #     if word_context != word_text:
-                    #         label = word_context[2]
-                    #         if label[0] == 'V' and label[2] == 'G':
-                    #             files_gerunds.append(files_period[index_file])
-                    #             gerunds.append(context)
-                    #             printable_gerund = [str(word[0]) for word in context]
-                    #             printable_gerund = ' '.join(printable_gerund)
-                    #             printable_gerund = printable_gerund.replace(' .', '.').replace(' :', ':').replace(' ,', ',')
-                    #             printable_gerunds.append(printable_gerund)
-                    #             break
                     
                     #We also create a printable version of the context
                     printable_context = [str(word[0]) for word in context]
@@ -778,18 +762,12 @@ def return_contexts(word, df, all_tokens, window_size):
         if str(window_size).lower() == "r1":
             path = f"./tables/contexts/{word}/R1/"
             name_file = f"{bins[index_period]}_contexts_{word}_R1.csv"
-            # path_gerund = f"./tables/gerunds/{word}/R1/"
-            # name_gerund = f"{bins[index_period]}_gerunds_{word}_R1.csv"
         elif str(window_size).lower() == "l1":
             path = f"./tables/contexts/{word}/L1/"
             name_file = f"{bins[index_period]}_contexts_{word}_L1.csv"
-            # path_gerund = f"./tables/gerunds/{word}/L1/"
-            # name_gerund = f"{bins[index_period]}_gerunds_{word}_L1.csv"
         else:
             path = f"./tables/contexts/{word}/{window_size*2}-token_window/"
             name_file = f"{bins[index_period]}_contexts_{word}_{window_size*2}_window.csv"
-            # path_gerund = f"./tables/gerunds/{word}/{window_size*2}-token_window/"
-            # name_gerund = f"{bins[index_period]}_gerunds_{word}_{window_size*2}_window.csv"
             
         try:
             os.makedirs(path)
@@ -797,19 +775,6 @@ def return_contexts(word, df, all_tokens, window_size):
             pass
         
         df_contexts.to_csv(path + name_file, index=False)
-        
-        
-        # df_gerunds = pd.DataFrame({'Period': bins[index_period],
-        #                            'File': files_gerunds,
-        #                            'Context': gerunds,
-        #                            'Printable_cont': printable_gerunds})
-        # try:
-        #     os.makedirs(path_gerund)
-        # except FileExistsError: # directory already exists
-        #     pass
-        
-        # df_gerunds.to_csv(path_gerund + name_gerund, index=False)
-        
         
         #OPTIONAL: We print the period that has just been analyzed as a control measure    
         print('Period "' + str(bins[index_period]) + '" analyzed.')
@@ -853,7 +818,6 @@ def df_contexts(all_tokens, window_size, word):
         
         tokens_period = []
         lemmas_period = []
-        all_lemmas_period = []
         pos_period = []
         
         size_corpus = 0
@@ -867,7 +831,6 @@ def df_contexts(all_tokens, window_size, word):
             size_corpus += len(text)
             #We iterate through every word of the text
             for word_text in text:
-                all_lemmas_period.append(word_text[1])
                 #We create a condition for if the word of the text in the right column ('Token'/'Lemma'/'Label') matches the given word
                 if word_text[type_of_word] == word:
                     occurrences += 1
@@ -929,19 +892,9 @@ def df_contexts(all_tokens, window_size, word):
         
         set_lemmas_period = list(set(lemmas_period))
         all_lemmas.append(set_lemmas_period)
-        
-        # set_pos_period = list(set(pos_period))
-        # all_pos.append(set_pos_period)
-        
-        # all_occurrences.append(occurrences)
-        size_corpora.append(size_corpus)
-        
 
-        # set_all_lemmas_period = list(set(all_lemmas_period))
-        
-        
-        # rel_pos.append(len(set_pos_period)/14)
-        # rel_lemmas.append(len(set_lemmas_period)/len(set_all_lemmas_period))
+        size_corpora.append(size_corpus)
+
         rel_lemmas.append(len(set_lemmas_period)/occurrences)
         rel_types.append(len(types_period)/size_corpus)
         
@@ -950,10 +903,8 @@ def df_contexts(all_tokens, window_size, word):
         print('\n')
         
         #We add 1 to the counter of the periods
-
         index_period += 1
     
-    # print(len(periods), len(size_corpora), len(all_lemmas), len(all_types), len(rel_lemmas), len(rel_types))
     #We create a dataframe with the infomation that has been retrieved
     df_contexts = pd.DataFrame({'period': periods,
                                 'tokens_period': size_corpora,
@@ -981,53 +932,7 @@ def df_contexts(all_tokens, window_size, word):
     df_contexts.to_csv(path + name_file, index=False)  
     
     ############### PLOTTING ###################
-    # #Plot 1 - Gerunds
-    # #We set the 'Periods' column as the index
-    # if str(window_size).lower() == "r1":
-    #     title = f"Relative frequency of gerunds in R1 position with '{word}'"
-    #     name_file = f'{word}_gerunds_R1.png'
-    #     path = "./plots/lineplot/gerunds/R1/"
-    # elif str(window_size).lower() == "l1":
-    #     title = f"Relative frequency of gerunds in L1 position with '{word}'"
-    #     name_file = f'{word}_gerunds_L1.png'
-    #     path = "./plots/lineplot/gerunds/L1/"
-    # else:
-    #     title = f"Relative frequency of gerunds occurring with '{word}' in a {window_size*2}-token window"
-    #     name_file = f'{word}_gerunds_{window_size*2}_window.png'
-    #     path = f"./plots/lineplot/gerunds/{window_size*2}-token_window/"
-    # #We set the size of the plot
-    # plt.figure(figsize=(12, 6))
-    # #We create a line plot with the dataframe
-    # if word.lower() == "estar":
-    #     plt.plot(df_contexts['period'], df_contexts['rel_gerunds'], linewidth=1, color='tab:orange')
-    # else:
-    #     plt.plot(df_contexts['period'], df_contexts['rel_gerunds'], linewidth=1, color='b')
-    # #We specify the axis labels
-    # plt.xlabel('Year', fontsize=13, font=font_name, weight="bold")
-    # plt.ylabel("Relative frequency", font=font_name, weight="bold", fontsize=13)
-    # #We adjust the axis sizes
-    # plt.xticks(np.arange(1100, 1600, 50), fontsize=13, font=font_name)
-    # plt.yticks(fontsize=13, font=font_name)
-    # #We add a title to the plot
-    # plt.title(title, fontsize=15, font=font_name, weight="bold")
-    # #We add a grid to the plot to facilitate the understanding of it
-    # # sns.set_theme()
-    # plt.grid(b=True, which='major', color='black', linewidth=0.075)
-    # plt.grid(b=True, which='minor', color='black', linewidth=0.075)
-    
-    # #We create a specific folder for the lineplot
-    # try:
-    #     os.makedirs(path)
-    # except FileExistsError: # directory already exists
-    #     pass
-    
-    # #We save the plot into a PNG file
-    # plt.savefig(path + name_file, bbox_inches='tight', dpi=200)
-    # #We display the line plot
-    # plt.show()
-    
-    
-    #Plot 2 - Collocate diversity
+    #Plotting collocate diversity
     df_plot = pd.DataFrame({'Period': periods,
                             'Types': rel_types})
     df_plot.set_index('Period', inplace=True)
@@ -1438,69 +1343,6 @@ def df_two_words(all_tokens, word2, df_files):
     #We return the list of all contexts
     return df_frequencies
 
-def plot_gerunds(word2, window_size):
-    if str(window_size).lower() == "r1":
-        path = "./tables/contexts/R1/"
-        title = f"Relative frequency of gerunds occurring in R1 position with '{word}/{word2}'"
-        name_file = f"{word}_{word2}_gerunds_R1"
-    elif str(window_size).lower() == "l1":
-        path = "./tables/contexts/L1/"
-        title = f"Relative frequency of gerunds occurring in L1 position with '{word}/{word2}'"
-        name_file = f"{word}_{word2}_gerunds_L1"
-    else:
-        path = "./tables/contexts/" + str(int(window_size)*2) + "-token_window/"
-        title=f"Relative frequency of gerunds occurring with '{word}/{word2}' in a " + str(int(window_size)*2) + "-token window"
-        name_file = f"{word}_{word2}_gerunds_" + str(int(window_size)*2) + "_window"
-    #We list the name of all the items contained in the folder (and exclude the hidden items)
-    tables = [f for f in os.listdir(path) if f.endswith('.csv') and not f.startswith('.')]
-    #We sort the obtained list
-    tables.sort(key=lambda x: '{0:0>8}'.format(x).lower())
-    
-    df_estar = pd.read_csv(path + tables[0], encoding='UTF-8')
-    df_ser = pd.read_csv(path + tables[1], encoding='UTF-8')
-    
-    df_plot = pd.DataFrame({'Period': df_ser['period'],
-                            word: df_ser['rel_gerunds'],
-                            word2: df_estar['rel_gerunds']})
-    #We set the 'Periods' column as the index
-    df_plot.set_index('Period', inplace=True)
-    
-    #We set the size of the plot
-    plt.figure(figsize=(12, 6))
-    #We create a line plot with the dataframe
-    plt.plot(df_plot, linewidth=1)
-    #We specify the axis labels
-    plt.xlabel('Year', fontsize=13, font=font_name, weight="bold")
-    plt.ylabel("Relative frequency", font=font_name, weight="bold", fontsize=13)
-    #We adjust the axis sizes
-    plt.xticks(np.arange(1100, 1600, 50), fontsize=13, font=font_name)
-    plt.yticks(fontsize=13, font=font_name)
-    #We add a legend to the upper right corner and specify its size
-    plt.legend([word, word2], loc ="upper right", fontsize=13)
-    #We add a title to the plot
-    plt.title(title, font=font_name, weight="bold", fontsize=15)
-    #We add a grid to the plot to facilitate the understanding of it
-    # sns.set_theme()
-    plt.grid(b=True, which='major', color='black', linewidth=0.075)
-    plt.grid(b=True, which='minor', color='black', linewidth=0.075)
-    
-    #We create a specific folder for the lineplot
-    if str(window_size).lower() == "r1":
-        path2 = f"./plots/lineplot/gerunds/{word}_{word2}/R1/"
-    elif str(window_size).lower() == "l1":
-        path2 = f"./plots/lineplot/gerunds/{word}_{word2}/L1/"
-    else:
-        path2 = f"./plots/lineplot/gerunds/{word}_{word2}/" + str(int(window_size)*2) + "-token_window/"
-    try:
-        os.makedirs(path2)
-    except FileExistsError: # directory already exists
-        pass
-    
-    #We save the plot into a PNG file
-    plt.savefig(path2 + name_file + '.png', bbox_inches='tight', dpi=200)
-    #We display the line plot
-    plt.show()
-
 def plot_specific_pos(word2, window_size, pos):
     pos_lower = pos.lower()
     if str(window_size).lower() == "r1":
@@ -1580,13 +1422,6 @@ print("\n")
 # df_files = df_files(df_metadata)
 # all_tokens = list_tokens(df_files)
 # contexts = return_contexts(word, df_files, all_tokens, window_size)
-
-################## Gerunds ##################
-# df_files = df_files(df_metadata)
-# all_tokens = list_tokens(df_files)
-# df_gerunds = return_contexts(word, df_files, all_tokens, window_size)
-# word2 = input('(Same wordtype as word 1) Enter another word or label to search for: ').lower()
-# plot_gerunds = plot_gerunds(word2, window_size)
 
 ################## POS/Lemma/Types table ##################
 # df_files = df_files(df_metadata)
